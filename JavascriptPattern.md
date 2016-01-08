@@ -64,3 +64,40 @@ var myModule = (function () {
 缺点：  
 * 访问私有，共有的东西更繁琐了，  
 * 不利于unit test
+* 改进型的module pattern  
+    
+var myRevealingModule = (function () {
+ 
+        var privateVar = "Ben Cherry",
+            publicVar = "Hey there!";
+ 
+        function privateFunction() {
+            console.log( "Name:" + privateVar );
+        }
+ 
+        function publicSetName( strName ) {
+            privateVar = strName;
+        }
+ 
+        function publicGetName() {
+            privateFunction();
+        }
+ 
+ 
+        // Reveal public pointers to
+        // private functions and properties
+ 
+        return {
+            setName: publicSetName,
+            greeting: publicVar,
+            getName: publicGetName
+        };
+ 
+    })();
+### 3. 单件模式  
+<font color=red>利用了module pattern实现  </font>
+* 定义私有变量 _instance  
+* 定义私有属性，函数
+* 私有init函数
+* 在init函数中，根据需求返回可见的属性，函数
+* 在返回函数中，根据_instance是否存在来调用init函数，然后返回_instance
