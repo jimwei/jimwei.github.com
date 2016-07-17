@@ -1,0 +1,54 @@
+
+在sheet中，经常需要考虑给定两个矩形，它们是否相交，比如A1：C5，和B2：D8，称为Rect1和Rect2，如何判定它们是否相交，如果相交，那么相交的区域如何计算呢？
+首先，我们来分析一下，两个矩形在平面上的位置变化关系。
+1. 两个矩形不相交，则Rect1和Rect2的位置关系有4种，分别是Rect1在Rect2的左边，右边，上边，或下边；
+2. Rect1和Rect2相交，则它们的位置关系有以下几种：
+2.1. 包含关系，Rect1包含Rect2或者Rect2包含Rect1，共有2种情况；
+2.2. 某一个角位于对方的区域，比如Rect1的右下角位于Rect2的区域内，这种case共有8种情况；
+2.3. 有2个角位于对方的区域，比如Rect1的右上和右下角位于Rect2的区域内，这种case共有8种情况；
+2.4. 没有角位于对方额区域，但是中间区域相交了，共2种情况。
+
+接下来，如何计算确定这些关系及相交区域呢？
+我们可以将矩形结构转化为一个2维数组，第一维表示row，第二维表示column，比如Rect1可以表示为{{1，5}，{A，C}}，Rect2可以表示为{{2，8}，{B，D}}。、
+这样，对矩形相交的运算，就转化为对两个2维数组运算的处理了。
+
+3. 判定2个矩形是否相交？
+判定两个矩形是否相交，只需要判定两个2维数组中，row数组和column数组是否相交可以了。
+
+row数组相交判定方法：
+检测矩形一的top row和bottom row是否在矩形二中的row数组区域中，或者矩形二的top row和bottom row是否在矩形一中的row数组区域中。
+举例：
+检测Rect1和Rect2的row是否相交：
+Rect1的top row：1，bottom row：5，则检测1和5是否在{2，8}中；
+或者Rect2的top row：2，bottom row：8，则检测2，和8 是否在{1，5}中。
+发现5在{2，8}中，则Rect1和 Rect2的行相交；
+
+column数组的相交判定方法同row数组地的一样。
+举例：
+检测Rect1和Rect2的column是否相交：
+Rect1的left column：A，right column：C，则检测A和C是否在{B，D}中；
+或者Rect2的left column：B，right column：D，则检测B，和D 是否在{A，C}中。
+发现C在{B，D}中，则Rect1和 Rect2的列相交；
+
+相交区域的计算：
+经总结后发现
+相交区域的行列计算表达式如下：
+行：
+top row = max(Rect1.TopRow,Rect2.TopRow),
+bottom row = min(Rect1.BottomRow,Rect2.BottomRow)
+
+列：
+left column = max(Rect1.LeftColumn,Rect2.LeftColumn)
+right column = min(Rect1.RightColumn,Rect2.RightColumn)
+
+举例：
+还是计算Rect1和Rect2的相交，根据上面的是否相交方法，我们已经判定出这两个矩形相交。
+则相交区域的row和column计算为：
+topTow = max(1,2) = 2
+bottomRow = min(5,8) = 5
+leftColumn = max(A,B) = B
+rightColumn = min(C,D) = C
+
+则这个相交区域数组表示为：{{2，5}，{B，C}}，在sheet中即为B2:C5.
+
+至此，如何确定并计算两个矩形相交就完成了。
