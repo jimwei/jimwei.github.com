@@ -1,0 +1,44 @@
+Style继承链：
+default style => table style => non-default cell style => CF style
+
+Cell style:
+1.Font:
+id == 0 时，为default。
+
+id != 0 时，要对比子属性。
+凡是子属性与0号Font相同的，认为是default属性，将继承table相应的属性。
+
+2.Fill:
+id == 0 为default。
+id != 0 为local value。
+
+3.Border:
+id == 0 时，为default。
+
+id != 0 时:
+始终都有一个0号border且所有子属性都是空，即无border(新建excel文件时可见到)，如下：
+        <border>
+            <left />
+            <right />
+            <top />
+            <bottom />
+            <diagonal />
+        </border>
+即使手动将0号border改为有值的属性，excel也不会使用，它始终默认使用的是无子属性border。
+所以，此时当前border的无值子属性会被认为是default属性，将继承table相应的属性。
+凡是有值的，都是local属性。
+例如：
+       <border>
+            <left style="double">
+                <color rgb="FF7030A0" />
+            </left>
+            <right style="double">
+                <color rgb="FFFF0000" />
+            </right>
+            <top />
+            <bottom style="double">
+                <color rgb="FF7030A0" />
+            </bottom>
+            <diagonal />
+        </border>
+其中 top, diagonal 将尝试继承table相应属性值，其他border使用本地值
