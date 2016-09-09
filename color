@@ -1,0 +1,9 @@
+if color has the tint, the rgb value calc expression is:
+r = color.R + tint*(255-color.R);
+g = color.G + tint*(255-color.G);
+r = color.B + tint*(255-color.B);
+
+to shade:
+r = color.R * (1-factor);
+g = color.G * (1-factor);
+b = color.B * (1-factor);
