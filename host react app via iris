@@ -1,0 +1,21 @@
+1. use webpack to package the client to output directry named build
+npm run build
+2. copy the build directory to new host directory, and under the direcory create main.go, write the code below
+package main
+
+import (
+	"github.com/kataras/iris"
+)
+
+func main() {
+	app := iris.New()
+	app.RegisterView(iris.HTML("./build", ".html"))
+
+	app.Get("/", func(ctx iris.Context) {
+		ctx.View("index.html")
+	})
+
+	assetHandler := app.StaticHandler("./build", false, false)
+	app.SPA(assetHandler)
+	app.Run(iris.Addr(":4000"))
+}
