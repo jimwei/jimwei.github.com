@@ -1,0 +1,19 @@
+在groupCache中, LRU的实现比较简单.
+1. 底层采用双链表实现;
+    type Cache struct {
+      // MaxEntries is the maximum number of cache entries before
+      // an item is evicted. Zero means no limit.
+      MaxEntries int
+
+      // OnEvicted optionally specificies a callback function to be
+      // executed when an entry is purged from the cache.
+      OnEvicted func(key Key, value interface{})
+
+      ll    *list.List
+      cache map[interface{}]*list.Element
+    }
+2. 不是线程安全的;
+3. 没有过期设置,只能设置cache的最大数量
+   在向cache中新增一个对象时, 
+   首先,会会将这个对象插入到链表的第一个位置;
+   然后,会检查链表的容量是否大于允许的最大值, 如果成立, 则会删除链表的最后一项
