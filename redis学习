@@ -1,3 +1,39 @@
 1. pub/sub发布订阅
   - 采用发送即忘的策略(fire and forget)
   - 目前不支持可靠发送通知
+  - publish, subscribe, unsubscribe
+  - psubscribe订阅模式(pattern matching)
+2. Transaction事务
+  - EXEC负责触发执行事务中的所有命令
+  - MULTI: 开启一个事务
+    e.g. 
+    multi
+    set who "jimwei"
+    set action "walk"
+    exec
+  - DISCARD: 放弃事务
+  - 不支持事务回滚
+  - CHECK and SET 乐观锁
+    watch
+    e.g.
+    connection 1:
+    watch a
+    set a "1"
+    set b "2"
+    connection 2:
+    set a "11"
+    connection 1:
+    exec
+    result: nil(由于a被connection 2已经修改, 所以本次的事务失败)
+3. 通讯协议
+  - default port: 6379
+4. 持久化
+  - rdb
+  - aof
+5. master-slave
+  - sentenil
+    监控
+    提醒
+    自动故障转移
+  - gossip protocal
+   在一个指定的频率下, 每台机器随机选取另外一台的机器, 与之分享信息.
